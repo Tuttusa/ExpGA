@@ -49,8 +49,9 @@ input_bounds = config.input_bounds
 classifier_name = './models/bank/MLP_unfair.pkl'  # replace
 
 def create_and_train_model(X, y):
+    input_dim = X.shape[1]
     model = Sequential([
-        Dense(64, activation='relu', input_shape=(X.shape[1],)),
+        Dense(64, activation='relu', input_shape=(input_dim,)),
         Dropout(0.2),
         Dense(32, activation='relu'),
         Dropout(0.2),
@@ -77,7 +78,11 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Create and train model
 model = create_and_train_model(X_train, y_train)
-model.fit(X_train, y_train, epochs=10, batch_size=32, validation_split=0.2, verbose=1)
+history = model.fit(X_train, y_train, 
+                   epochs=10, 
+                   batch_size=32, 
+                   validation_split=0.2, 
+                   verbose=1)
 
 # Evaluate the model
 test_loss, test_accuracy = model.evaluate(X_test, y_test, verbose=0)
