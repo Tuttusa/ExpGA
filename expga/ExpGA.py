@@ -5,7 +5,7 @@ import numpy as np
 import random
 import time
 from utils.config import census, credit, bank
-from sklearn.externals import joblib
+import joblib
 import lime
 import shap
 from keras.models import load_model
@@ -43,7 +43,7 @@ sensitive_param = 1
 threshold_l = 10  # replace census-7,credit-14,bank-10
 threshold = 0
 input_bounds = config.input_bounds
-classifier_name = '../models/bank/MLP_unfair.pkl'  # replace
+classifier_name = './models/bank/MLP_unfair.pkl'  # replace
 
 model = joblib.load(classifier_name)
 
