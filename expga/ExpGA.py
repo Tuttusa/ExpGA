@@ -8,7 +8,10 @@ from utils.config import census, credit, bank
 import joblib
 import lime
 import shap
-from keras.models import load_model
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from keras.optimizers import Adam
+from sklearn.model_selection import train_test_split
 import signal
 from lime.lime_tabular import LimeTabularExplainer
 from Genetic_Algorithm import GA
@@ -45,7 +48,40 @@ threshold = 0
 input_bounds = config.input_bounds
 classifier_name = './models/bank/MLP_unfair.pkl'  # replace
 
-model = joblib.load(classifier_name)
+def create_and_train_model(X, y):
+    model = Sequential([
+        Dense(64, activation='relu', input_shape=(X.shape[1],)),
+        Dropout(0.2),
+        Dense(32, activation='relu'),
+        Dropout(0.2),
+        Dense(16, activation='relu'),
+        Dense(1, activation='sigmoid')
+    ])
+    
+    model.compile(optimizer=Adam(learning_rate=0.001),
+                 loss='binary_crossentropy',
+                 metrics=['accuracy'])
+    
+    return model
+
+# Load and preprocess data based on dataset
+if dataset == "bank":
+    X, y = bank_data()
+elif dataset == "census":
+    X, y = census_data()
+elif dataset == "credit":
+    X, y = credit_data()
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and train model
+model = create_and_train_model(X_train, y_train)
+model.fit(X_train, y_train, epochs=10, batch_size=32, validation_split=0.2, verbose=1)
+
+# Evaluate the model
+test_loss, test_accuracy = model.evaluate(X_test, y_test, verbose=0)
+print(f"\nTest accuracy: {test_accuracy:.4f}")
 
 
 def ConstructExplainer(train_vectors, feature_names, class_names):
@@ -213,7 +249,7 @@ def xai_fair_testing(max_global, max_local):
 
     start = time.time()
 
-    model_name = classifier_name.split("/")[-1].split("_")[0]
+    model_name = "MLP"
     # file_name = "aequitas_"+dataset+sensitive_param+"_"+model+""
     file_name = "expga_{}_{}{}.txt".format(model_name,dataset,sensitive_param)
     f =open(file_name,"a")
