@@ -5,7 +5,7 @@ sys.path.append("../")
 def bank_data():
     """
     Prepare the data of dataset Bank Marketing
-    :return: X, Y as numpy arrays for training
+    :return: X, Y, input shape and number of classes
     """
     X = []
     Y = []
@@ -23,4 +23,7 @@ def bank_data():
     X = np.array(X, dtype=float)
     Y = np.array(Y, dtype=float)
     
-    return X, Y
+    input_shape = (None, X.shape[1])
+    nb_classes = 2
+    
+    return X, Y, input_shape, nb_classes
