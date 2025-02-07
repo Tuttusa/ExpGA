@@ -1,6 +1,5 @@
 import numpy as np
 import sys
-sys.path.append("../")
 
 def bank_data():
     """
@@ -10,20 +9,23 @@ def bank_data():
     X = []
     Y = []
     i = 0
-    with open("../datasets/bank", "r") as ins:
+    with open("./datasets/bank", "r") as ins:
         for line in ins:
             line = line.strip()
             line1 = line.split(',')
             if (i == 0):
                 i += 1
                 continue
-            X.append([float(x) for x in line1[:-1]])  # Convert strings to float directly
-            Y.append(int(line1[-1]))  # Keep Y as single labels
-    
+            L = map(int, line1[:-1])
+            X.append(line1[:-1])
+            if int(line1[-1]) == 0:
+                Y.append([1, 0])
+            else:
+                Y.append([0, 1])
     X = np.array(X, dtype=float)
     Y = np.array(Y, dtype=float)
-    
-    input_shape = (None, X.shape[1])
+
+    input_shape = (None, 16)
     nb_classes = 2
-    
+
     return X, Y, input_shape, nb_classes
