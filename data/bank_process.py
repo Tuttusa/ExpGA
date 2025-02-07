@@ -1,5 +1,4 @@
 import sys
-sys.path.append("../")
 import numpy as np
 
 """
@@ -21,7 +20,7 @@ poutcome = ["unknown","other","failure","success"]
 output = ["no","yes"]
 
 data = []
-with open("../datasets/bank_raw/bank-full.csv", "r") as ins:
+with open("./datasets/bank_raw/bank-full.csv", "r") as ins:
     for line in ins:
         line = line.strip()
         features = line.split(';')

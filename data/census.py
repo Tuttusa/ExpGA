@@ -1,6 +1,5 @@
 import numpy as np
 import sys
-sys.path.append("../")
 
 def census_data():
     """
@@ -11,7 +10,7 @@ def census_data():
     Y = []
     i = 0
 
-    with open("../datasets/census", "r") as ins:
+    with open("./datasets/census", "r") as ins:
         for line in ins:
             line = line.strip()
             line1 = line.split(',')

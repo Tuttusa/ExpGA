@@ -10,7 +10,7 @@ def bank_data():
     X = []
     Y = []
     i = 0
-    with open("../datasets/bank", "r") as ins:
+    with open("./datasets/bank", "r") as ins:
         for line in ins:
             line = line.strip()
             line1 = line.split(',')
